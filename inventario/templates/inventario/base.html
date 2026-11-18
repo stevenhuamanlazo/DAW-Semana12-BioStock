@@ -10,13 +10,28 @@
   <header>
     <h1>BioStock</h1>
     <nav>
-      <a href="{% url 'producto_lista' %}">Productos</a>
-      <a href="{% url 'producto_crear' %}">Nuevo producto</a>
-      <a href="{% url 'movimiento_lista' %}">Movimientos</a>
-      <a href="{% url 'movimiento_registrar' %}">Registrar movimiento</a>
-      <a href="{% url 'proveedor_crear' %}">Nuevo proveedor</a>
-      <a href="/admin/">Admin</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard' %}">Panel</a>
+        {% if perms.inventario.view_producto %}<a href="{% url 'producto_lista' %}">Productos</a>{% endif %}
+        {% if perms.inventario.add_producto %}<a href="{% url 'producto_crear' %}">Nuevo producto</a>{% endif %}
+        {% if perms.inventario.view_movimientoinventario %}<a href="{% url 'movimiento_lista' %}">Movimientos</a>{% endif %}
+        {% if perms.inventario.add_movimientoinventario %}<a href="{% url 'movimiento_registrar' %}">Registrar movimiento</a>{% endif %}
+        {% if perms.inventario.add_proveedor %}<a href="{% url 'proveedor_crear' %}">Nuevo proveedor</a>{% endif %}
+        {% if user.is_staff %}<a href="/admin/">Admin</a>{% endif %}
+      {% else %}
+        <a href="{% url 'login' %}">Iniciar sesión</a>
+        <a href="{% url 'registro' %}">Registrarse</a>
+      {% endif %}
     </nav>
+    {% if user.is_authenticated %}
+    <div class="usuario">
+      <span>{{ user.get_full_name|default:user.username }}
+        ({% for g in user.groups.all %}{{ g.name }}{% empty %}{% if user.is_superuser %}Superusuario{% else %}sin rol{% endif %}{% endfor %})</span>
+      <form method="post" action="{% url 'logout' %}">{% csrf_token %}
+        <button type="submit" class="btn-link">Cerrar sesión</button>
+      </form>
+    </div>
+    {% endif %}
   </header>
   <main>
     {% if messages %}

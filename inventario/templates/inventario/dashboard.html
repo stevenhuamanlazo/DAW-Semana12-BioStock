@@ -1,0 +1,41 @@
+{% extends "inventario/base.html" %}
+{% block titulo %}Panel{% endblock %}
+{% block contenido %}
+<div class="grid">
+  <div class="kpi"><strong>{{ total }}</strong>Productos activos</div>
+  <div class="kpi alerta"><strong>{{ vencidos|length }}</strong>Vencidos</div>
+  <div class="kpi alerta"><strong>{{ por_vencer|length }}</strong>Por vencer (30 días)</div>
+  <div class="kpi alerta"><strong>{{ bajo_stock|length }}</strong>Con stock bajo</div>
+</div>
+
+<div class="tarjeta">
+  <h2>Alertas de inventario</h2>
+  <table>
+    <thead><tr><th>Código</th><th>Producto</th><th>Vence</th><th>Stock</th><th>Alerta</th></tr></thead>
+    <tbody>
+    {% for p in vencidos %}<tr><td>{{ p.codigo }}</td><td>{{ p.nombre }}</td><td>{{ p.fecha_vencimiento|date:"d/m/Y" }}</td><td>{{ p.stock_actual }}</td><td><span class="badge VENCIDO">Vencido</span></td></tr>{% endfor %}
+    {% for p in por_vencer %}<tr><td>{{ p.codigo }}</td><td>{{ p.nombre }}</td><td>{{ p.fecha_vencimiento|date:"d/m/Y" }}</td><td>{{ p.stock_actual }}</td><td><span class="badge POR_VENCER">Por vencer</span></td></tr>{% endfor %}
+    {% for p in bajo_stock %}<tr><td>{{ p.codigo }}</td><td>{{ p.nombre }}</td><td>{{ p.fecha_vencimiento|date:"d/m/Y" }}</td><td class="bajo">{{ p.stock_actual }} / mín {{ p.stock_minimo }}</td><td><span class="badge SALIDA">Stock bajo</span></td></tr>{% endfor %}
+    {% if not vencidos and not por_vencer and not bajo_stock %}<tr><td colspan="5">Sin alertas.</td></tr>{% endif %}
+    </tbody>
+  </table>
+</div>
+
+<div class="tarjeta">
+  <h2>Últimos movimientos</h2>
+  <table>
+    <thead><tr><th>Fecha</th><th>Producto</th><th>Tipo</th><th>Cant.</th><th>Usuario</th></tr></thead>
+    <tbody>
+    {% for m in ultimos %}<tr><td>{{ m.fecha|date:"d/m/Y H:i" }}</td><td>{{ m.producto }}</td><td><span class="badge {{ m.tipo }}">{{ m.get_tipo_display }}</span></td><td>{{ m.cantidad }}</td><td>{{ m.usuario.username|default:"-" }}</td></tr>
+    {% empty %}<tr><td colspan="5">Sin movimientos.</td></tr>{% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="tarjeta">
+  <h2>Datos de la sesión</h2>
+  <p>Usuario: <strong>{{ user.username }}</strong> · Última actividad registrada por el middleware:
+     <strong>{{ ultima_actividad|default:"(primera petición)" }}</strong> · La sesión expira tras
+     <strong>{{ expira_en_min }} min</strong> de inactividad.</p>
+</div>
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends "inventario/base.html" %}
+{% block titulo %}Iniciar sesión{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <h2>Iniciar sesión</h2>
+  {% if form.errors %}
+  <div class="resumen-errores"><h3>Usuario o contraseña incorrectos.</h3>{{ form.non_field_errors }}</div>
+  {% endif %}
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="hidden" name="next" value="{{ next }}">
+    <button type="submit" class="btn">Ingresar</button>
+    <a href="{% url 'registro' %}" class="btn btn-sec">Crear cuenta</a>
+  </form>
+</div>
+{% endblock %}

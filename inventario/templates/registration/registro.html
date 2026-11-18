@@ -1,0 +1,19 @@
+{% extends "inventario/base.html" %}
+{% block titulo %}Registro{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <h2>Crear cuenta</h2>
+  {% if form.errors %}
+  <div class="resumen-errores">
+    <h3>Se encontraron {{ form.errors|length }} problema(s)</h3>
+    <details><summary>Ver detalle técnico (form.errors)</summary>{{ form.errors }}</details>
+  </div>
+  {% endif %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Registrarme</button>
+    <a href="{% url 'login' %}" class="btn btn-sec">Ya tengo cuenta</a>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "inventario/base.html" %}
+{% block titulo %}Acceso denegado{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <h2>403 - Acceso denegado</h2>
+  <p>Su rol no tiene permiso para realizar esta acción.</p>
+  <a href="{% url 'dashboard' %}" class="btn">Volver al panel</a>
+</div>
+{% endblock %}
