@@ -1,0 +1,28 @@
+{% extends "inventario/base.html" %}
+{% block titulo %}{{ titulo }}{% endblock %}
+{% block contenido %}
+<div class="tarjeta">
+  <h2>{{ titulo }}</h2>
+
+  {% if form.errors %}
+  <div class="resumen-errores">
+    <h3>Se encontraron {{ form.errors|length }} problema(s) en el formulario</h3>
+    {% if form.non_field_errors %}
+      <strong>Errores generales (__all__):</strong>
+      {{ form.non_field_errors }}
+    {% endif %}
+    <details>
+      <summary>Ver detalle técnico (form.errors)</summary>
+      {{ form.errors }}
+    </details>
+  </div>
+  {% endif %}
+
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn">Guardar</button>
+    <a href="{% url 'producto_lista' %}" class="btn btn-sec">Cancelar</a>
+  </form>
+</div>
+{% endblock %}

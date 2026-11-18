@@ -1,0 +1,31 @@
+{% load static %}<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block titulo %}BioStock{% endblock %} | BioStock</title>
+  <link rel="stylesheet" href="{% static 'inventario/css/biostock.css' %}">
+</head>
+<body>
+  <header>
+    <h1>BioStock</h1>
+    <nav>
+      <a href="{% url 'producto_lista' %}">Productos</a>
+      <a href="{% url 'producto_crear' %}">Nuevo producto</a>
+      <a href="{% url 'movimiento_lista' %}">Movimientos</a>
+      <a href="{% url 'movimiento_registrar' %}">Registrar movimiento</a>
+      <a href="{% url 'proveedor_crear' %}">Nuevo proveedor</a>
+      <a href="/admin/">Admin</a>
+    </nav>
+  </header>
+  <main>
+    {% if messages %}
+      <ul class="mensajes">
+        {% for m in messages %}<li class="{{ m.tags }}">{{ m }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% block contenido %}{% endblock %}
+  </main>
+  <footer>BioStock - Inventario de suministros médicos y reactivos de laboratorio · UNCP · IS093A</footer>
+</body>
+</html>
